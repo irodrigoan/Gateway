@@ -8,6 +8,7 @@ const schema = z.object({
   PORT: z.coerce.number().default(3333),
   JWT_PUBLIC_KEY: z.base64().min(1),
   AUTH_SERVICE_URL: z.url(),
+  USERS_SERVICE_URL: z.url(),
   CORS_ORIGIN: z.string().default("*"),
 });
 

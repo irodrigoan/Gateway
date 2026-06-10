@@ -6,4 +6,9 @@ export const services = [
     upstream: env.AUTH_SERVICE_URL,
     auth: false,
   },
+  {
+    prefix: "/users",
+    upstream: env.USERS_SERVICE_URL,
+    auth: true,
+  },
 ];

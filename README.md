@@ -49,6 +49,7 @@ Copy `.env.example` to `.env` and fill it in:
 | `PORT`             | no       | `3333`        | Listening port. Injected automatically on Railway.          |
 | `JWT_PUBLIC_KEY`   | yes      | —             | Public key in **base64** used to verify the JWT signatures. |
 | `AUTH_SERVICE_URL` | yes      | —             | URL of the auth service that `/auth` is forwarded to.       |
+| `USERS_SERVICE_URL`| yes      | —             | URL of the users service that `/users` is forwarded to (include the `/private` path, e.g. `https://users.example.com/private`). |
 | `CORS_ORIGIN`      | no       | `*`           | Allowed CORS origins: `*` or a comma-separated list.        |
 
 ## Generating the JWT keys
@@ -105,10 +106,11 @@ npm start
 
 ## Endpoints
 
-| Method | Route     | Auth | Description                                   |
-| ------ | --------- | ---- | --------------------------------------------- |
-| GET    | `/health` | no   | Gateway status (uptime, memory, connections). |
-| \*     | `/auth/*` | no   | Forwarded to `AUTH_SERVICE_URL`.              |
+| Method | Route      | Auth | Description                                                                 |
+| ------ | ---------- | ---- | -------------------------------------------------------------------------- |
+| GET    | `/health`  | no   | Gateway status (uptime, memory, connections).                              |
+| \*     | `/auth/*`  | no   | Forwarded to `AUTH_SERVICE_URL`.                                           |
+| \*     | `/users/*` | yes  | Forwarded to `USERS_SERVICE_URL`. Requires a valid JWT. The `/users` prefix is rewritten to the upstream path, so `/users/123` reaches `USERS_SERVICE_URL/private/123`. |
 
 ## Adding a new service
 
