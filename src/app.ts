@@ -18,6 +18,9 @@ export const app = fastify({
   logger: {
     level: isDev ? "debug" : "info",
   },
+  // Behind Railway's edge proxy: read the real client IP from X-Forwarded-For
+  // so rate limiting and logs use it instead of the internal proxy address.
+  trustProxy: true,
   connectionTimeout: 30_000,
   requestTimeout: 30_000,
 });
@@ -35,11 +38,6 @@ app.addHook("onRequest", async (_req, reply) => {
   if (app.isShuttingDown) {
     return reply.status(503).send({ status: "Unavailable" });
   }
-});
-
-// TEMP: check IP resolution behind the proxy (Railway). Remove after testing.
-app.addHook("onRequest", async (req) => {
-  req.log.info({ ip: req.ip, xff: req.headers["x-forwarded-for"] }, "ip-check");
 });
 
 app.setNotFoundHandler((req, reply) => {
