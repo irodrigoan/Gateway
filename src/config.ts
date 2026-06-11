@@ -11,4 +11,9 @@ export const services = [
     upstream: env.USERS_SERVICE_URL,
     auth: true,
   },
+  {
+    prefix: "/ip",
+    upstream: env.IP_SERVICE_URL,
+    auth: true,
+  },
 ];

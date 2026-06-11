@@ -9,6 +9,7 @@ const schema = z.object({
   JWT_PUBLIC_KEY: z.base64().min(1),
   AUTH_SERVICE_URL: z.url(),
   USERS_SERVICE_URL: z.url(),
+  IP_SERVICE_URL: z.url(),
   CORS_ORIGIN: z.string().default("*"),
 });
 
