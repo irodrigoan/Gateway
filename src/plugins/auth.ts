@@ -34,7 +34,7 @@ export async function setupAuth(app: FastifyInstance) {
       // without touching the JWT themselves.
       const { sub, actions } = req.user;
       if (sub) req.headers["x-user-id"] = sub;
-      if (actions) req.headers["x-user-actions"] = JSON.stringify(actions);
+      if (actions?.length) req.headers["x-user-actions"] = actions.join(",");
     }
 
     // The gateway is the only thing that needs the raw token. Strip it before

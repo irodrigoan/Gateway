@@ -112,6 +112,20 @@ npm start
 | \*     | `/auth/*`  | no   | Forwarded to `AUTH_SERVICE_URL`.                                           |
 | \*     | `/users/*` | yes  | Forwarded to `USERS_SERVICE_URL`. Requires a valid JWT. The `/users` prefix is rewritten to the upstream path, so `/users/123` reaches `USERS_SERVICE_URL/private/123`. |
 
+## Identity forwarding
+
+For services with `auth: true`, after verifying the JWT the gateway injects the verified identity into the request headers sent to the upstream, so downstream services can trust it without parsing the token themselves:
+
+| Header           | Example          | Description                                          |
+| ---------------- | ---------------- | ---------------------------------------------------- |
+| `x-user-id`      | `42`             | The token's `sub` claim.                             |
+| `x-user-actions` | `read,write`     | The token's `actions`, **comma-separated** (omitted when empty). |
+
+Security notes:
+
+- These headers are **stripped from every incoming request** before verification, so a client cannot spoof them — only the gateway sets them.
+- The `Authorization` header (the raw JWT) is **removed before forwarding**, so the token never reaches the downstream services.
+
 ## Adding a new service
 
 Proxied services live in [`src/config.ts`](src/config.ts). Each entry has:
